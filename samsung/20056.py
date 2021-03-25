@@ -64,6 +64,10 @@ def solution(N,M,K):
 				for m,s,d in maps[i][j] : 
 					answer += m 
 
+"""
+check
+"""
+
 	return answer
 
 from collections import deque
