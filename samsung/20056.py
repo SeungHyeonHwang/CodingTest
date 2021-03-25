@@ -1,38 +1,37 @@
 """
-¸¶¹ı»ç »ó¾î¿Í ÆÄÀÌ¾îº¼ 
-°ñ5
+ë§ˆë²•ì‚¬ ìƒì–´ì™€ íŒŒì´ì–´ ë³¼
 4 2 1
 1 1 5 2 2
 1 4 7 1 6
 """
 
 
-def solution(N,M,K,rcmsd):
-	dx = [-1,-1,0,1,1,1,0,-1]
-	dy = [0,1,1,1,0,-1,-1,-1]
+def solution(N,M,K):
+
 	answer = 0
-	maps = [[[] for _ in range(N)] for _ in range(N)]
-
+	
 	for k in range(K):
-		# 1. ÆÄÀÌ¾îº¼ ÀÌµ¿
-		for i in range(M):
-			r,c,m,s,d = map(int, rcmsd[i])
-			nx,ny = r-1+dx[d]*s, c-1+dy[d]*s
-			if nx < 0 : nx = N-1+nx+1
-			if ny < 0 : ny = N-1+ny+1
-			if nx >= N : nx%=N
-			if ny >= N : ny%=N
-			maps[nx][ny].append([m,s,d,False])
-
-		# 2. ÀÌµ¿ ÈÄ 
-		rcmsd = []
+		# 1. 
+		temp = []
+		for i in range(len(q)):
+			x,y = q.popleft()
+			for _ in range(len(maps[x][y])):
+				m,s,d = maps[x][y].popleft()
+				nx,ny = x+dx[d]*s, y+dy[d]*s
+				if nx < 0 : nx = N-1+nx+1
+				if ny < 0 : ny = N-1+ny+1
+				if nx >= N : nx%=N
+				if ny >= N : ny%=N
+				temp.append([nx,ny,m,s,d])
+				q.append([nx,ny])
+		for x,y,m,s,d in temp : 
+			maps[x][y].append([m,s,d])
+		# 2.
 
 		for i in range(N):
 			for j in range(N):
 				num = len(maps[i][j])
-				if num==1 and not maps[i][j][-1] :
-					rcmsd.append([i,j]+maps[i][j][0])
-				elif num > 1 : 
+				if num > 1 : 
 					me = maps[i][j][0][0]
 					sp = maps[i][j][0][1]
 					di = maps[i][j][0][2]%2
@@ -43,11 +42,11 @@ def solution(N,M,K,rcmsd):
 						if di != maps[i][j][l][2]%2 : 
 							st = False
 					me=int(me/5)
-					# 3. ÆÄÀÌ¾îº¼ ÇÕÄ¡±â
+					# 3. 
 					if me :
 						sp = int(sp/num)
 						nd = [0,2,4,6] if st else [1,3,5,7]
-						# 2. 4°³·Î ³ª´®
+						# 2. 
 						for o in range(4):
 							nx = i+dx[nd[o]]
 							ny = j+dy[nd[o]]
@@ -55,18 +54,26 @@ def solution(N,M,K,rcmsd):
 							if ny < 0 : ny = N-1+ny+1
 							if nx >= N : nx%=N
 							if ny >= N : ny%=N
-							rcmsd.append([nx,ny,me,sp,nd[o]])
-							maps[nx][ny].append([me,sp,nd[o],True])
-					# 4. ¼Ò¸ê
-					maps[i][j] = []
+							maps[nx][ny].append([me,sp,nd[o]])
 	for i in range(N):
 		print(maps[i])
-	print(rcmsd)
-	for i in rcmsd : 
-		answer+=i[2]
+
+	for i in range(N):
+		for j in range(N):
+			if maps[i][j]:
+				for m,s,d in maps[i][j] : 
+					answer += m 
 
 	return answer
 
+from collections import deque
 N,M,K = map(int, input().split())
-RCMSD = [list(map(int, input().split())) for _ in range(M)]
-print(solution(N,M,K,RCMSD))
+maps = [[deque() for _ in range(N)] for _ in range(N)]
+q = deque()
+dx = [-1,-1,0,1,1,1,0,-1]
+dy = [0,1,1,1,0,-1,-1,-1]
+for _ in range(M):
+	r,c,m,s,d = map(int, input().split())
+	maps[r-1][c-1].append([m,s,d])
+	q.append([r-1,c-1])
+print(solution(N,M,K))
