@@ -9,7 +9,6 @@
 def solution(N,M,K):
 
 	answer = 0
-	
 	for k in range(K):
 		# 1. 
 		temp = []
@@ -17,11 +16,7 @@ def solution(N,M,K):
 			x,y = q.popleft()
 			for _ in range(len(maps[x][y])):
 				m,s,d = maps[x][y].popleft()
-				nx,ny = x+dx[d]*s, y+dy[d]*s
-				if nx < 0 : nx = N-1+nx+1
-				if ny < 0 : ny = N-1+ny+1
-				if nx >= N : nx%=N
-				if ny >= N : ny%=N
+				nx,ny = (x+dx[d]*s)%N, (y+dy[d]*s)%N
 				temp.append([nx,ny,m,s,d])
 				q.append([nx,ny])
 		for x,y,m,s,d in temp : 
@@ -31,6 +26,7 @@ def solution(N,M,K):
 		for i in range(N):
 			for j in range(N):
 				num = len(maps[i][j])
+
 				if num > 1 : 
 					me = maps[i][j][0][0]
 					sp = maps[i][j][0][1]
@@ -43,20 +39,14 @@ def solution(N,M,K):
 							st = False
 					me=int(me/5)
 					# 3. 
+					maps[i][j] = deque()
 					if me :
 						sp = int(sp/num)
 						nd = [0,2,4,6] if st else [1,3,5,7]
 						# 2. 
 						for o in range(4):
-							nx = i+dx[nd[o]]
-							ny = j+dy[nd[o]]
-							if nx < 0 : nx = N-1+nx+1
-							if ny < 0 : ny = N-1+ny+1
-							if nx >= N : nx%=N
-							if ny >= N : ny%=N
-							maps[nx][ny].append([me,sp,nd[o]])
-	for i in range(N):
-		print(maps[i])
+							maps[i][j].append([me,sp,nd[o]])
+
 
 	for i in range(N):
 		for j in range(N):
@@ -64,9 +54,7 @@ def solution(N,M,K):
 				for m,s,d in maps[i][j] : 
 					answer += m 
 
-"""
-check
-"""
+
 
 	return answer
 
@@ -81,3 +69,7 @@ for _ in range(M):
 	maps[r-1][c-1].append([m,s,d])
 	q.append([r-1,c-1])
 print(solution(N,M,K))
+
+
+
+
