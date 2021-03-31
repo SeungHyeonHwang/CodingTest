@@ -11,9 +11,6 @@ def dfs(i,j,comb):
         if 0<=nx<5 and 0<=ny<5:
             dfs(nx,ny, comb+str(maps[nx][ny]))
         
-
-
-
 dx = [-1,0,1,0]
 dy = [0,1,0,-1]
 
