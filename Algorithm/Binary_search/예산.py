@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul  1 16:16:24 2020
 
-@author: USER
-"""
 
 
 # In[] : https://programmers.co.kr/learn/courses/30/lessons/43237
